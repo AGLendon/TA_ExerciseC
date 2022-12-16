@@ -123,26 +123,65 @@ tao_bl_lb= (5*beta+8*beta.^2)./(2+6*beta+9*beta.^2); %bending to longititunal
 rho_bl_lb= beta./(2+6*beta+9*beta.^2); %bending to longitidunal reflected
 rho_bb= (1-beta.^2)./(2+6*beta+9*beta.^2); % bending to bending reflected
 tao_ll= (beta.^2)./ (2+6*beta+9*beta.^2); % longitidunal to longitidunal
+rho_ll = 2./(2+6*beta+9*beta.^2); % longitidunal to longitidunal
 %%
 f1 = figure;
 semilogx(f, Lv); 
-
 legend('L_{v1}','L_{v2}','L_{v3}','L_{v4}')
+xlabel('f Hz')
+ylabel('Velocity Level dB ref. v_1')
+grid on;
 %%
-f2 = figure;
-semilogx(beta.^2, tao_bb); 
+
+
+f2 = figure(Name='Bendıng Coefficients');
+semilogx(beta.^2, tao_bb);
 hold on
-semilogx(beta.^2, tao_bl_lb); 
-semilogx(beta.^2, rho_bl_lb); 
-semilogx(beta.^2, rho_bb); 
-legend('tao_{bb}','tao_{bl}','rho_{bl}','rho_{bb}')
+sum2 = tao_bl_lb+tao_bb;
+sum3 = rho_bl_lb+tao_bl_lb+tao_bb;
+sum4 = rho_bb+rho_bl_lb+tao_bl_lb+tao_bb;
+semilogx(beta.^2, sum2); 
+semilogx(beta.^2, sum3); 
+semilogx(beta.^2, sum4); 
+%legend('tao_{bb}','tao_{bl}','rho_{bl}','rho_{bb}')
 xlim([beta(1)^2,beta(end)^2])
 ylim([0 1])
+xlabel('\beta^2')
+%ylabel()
+grid on;
+
+index = 200;
+step = 0.001;
+taubbRange = 0:step:tao_bb(index);
+vLine = zeros(size(taubbRange));
+plot(vLine+beta(index).^2,taubbRange,'k-',HandleVisibility='off')
+text(beta(index+5).^2,taubbRange(fix(length(taubbRange)/2)),'\tau_{bb}')
+
+index = 180;
+taublRange = tao_bb(index):step:sum2(index);
+vLine = zeros(size(taublRange));
+plot(vLine+beta(index).^2,taublRange,'k-',HandleVisibility='off')
+text(beta(index+5).^2,taublRange(fix(length(taublRange)/2)),'\tau_{bb}')
+
+index = 200;
+rhoblRange = sum2(index):step:sum3(index);
+vLine = zeros(size(rhoblRange));
+plot(vLine+beta(index).^2,rhoblRange,'k-',HandleVisibility='off')
+text(beta(index-30).^2,rhoblRange(fix(-10+length(rhoblRange)/2)),'\rho_{bl}')
+
+
+index = 180;
+rhobbRange = sum3(index):step:sum4(index);
+vLine = zeros(size(rhobbRange));
+plot(vLine+beta(index).^2,rhobbRange,'k-',HandleVisibility='off')
+text(beta(index+5).^2,rhobbRange(fix(length(rhobbRange)/2)),'\rho_{bb}')
 
 %%
 f3 = figure;
 semilogx(f, v.^0.5); 
 
 legend('v_1','v_2','v_3','v_4')
+xlabel('f Hz')
+grid on;
 %xlim([beta(1)^2,beta(end)^2])
 %ylim([0 1])
