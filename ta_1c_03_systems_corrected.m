@@ -121,26 +121,38 @@ rho_bl_lb= beta./(2+6*beta+9*beta.^2); %bending to longitidunal reflected
 rho_bb= (1-beta.^2)./(2+6*beta+9*beta.^2); % bending to bending reflected
 tao_ll= (beta.^2)./ (2+6*beta+9*beta.^2); % longitidunal to longitidunal
 rho_ll= 2./(2+6*beta+9*beta.^2); %  % longitidunal to longitidunal reflected
+%% Plot format
+line1style = 'k-';
+line2style = 'k--';
+line3style = 'k:';
+line4style = 'k-.';
+
 %%
 f1 = figure(Name= 'Velocity Levels',Position =  [100, 0, 880, 780]);
-semilogx(f, Lv); 
+hold on
+ax  = f1.get("CurrentAxes");
+ax.ColorOrder = [0 0 0];
+ax.LineStyleOrder = {'-','--',':','-.'}';
+h = semilogx(f, Lv); 
+
 legend('L_{v1}','L_{v2}','L_{v3}','L_{v4}')
 xlabel('f Hz')
 ylabel('Velocity Level dB ref. v_1')
 xlim([100 3000])
 ylim([-25 1.1])
 grid on;
+hold off
 %%
 
 f2 = figure(Name='Transmission & reflection coefficients bend, case:bending',Position =  [100, 0, 880, 780]);
-semilogx(beta.^2, tao_bb);
+semilogx(beta.^2, tao_bb,line1style);
 hold on
 sum2 = tao_bl_lb+tao_bb;
 sum3 = rho_bl_lb+tao_bl_lb+tao_bb;
 sum4 = rho_bb+rho_bl_lb+tao_bl_lb+tao_bb;
-semilogx(beta.^2, sum2); 
-semilogx(beta.^2, sum3); 
-semilogx(beta.^2, sum4); 
+semilogx(beta.^2, sum2,line1style); 
+semilogx(beta.^2, sum3,line1style); 
+semilogx(beta.^2, sum4,line1style); 
 %legend('tao_{bb}','tao_{bl}','rho_{bl}','rho_{bb}')
 xlim([beta(1)^2,beta(end)^2])
 ylim([0 1.02])
@@ -176,14 +188,14 @@ text(beta(index+5).^2,rhobbRange(fix(length(rhobbRange)/2)),'\rho_{bb}')
 
 %%
 f3 = figure(Name='Transmission & reflection coefficients Long, case:bending',Position =  [100, 0, 880, 780]);
-semilogx(beta.^2, tao_ll);
+semilogx(beta.^2, tao_ll,line1style);
 hold on
 sum2 = tao_bl_lb+tao_ll;
 sum3 = rho_bl_lb+tao_bl_lb+tao_ll;
 sum4 = rho_ll+rho_bl_lb+tao_bl_lb+tao_ll;
-semilogx(beta.^2, sum2); 
-semilogx(beta.^2, sum3); 
-semilogx(beta.^2, sum4); 
+semilogx(beta.^2, sum2,line1style); 
+semilogx(beta.^2, sum3,line1style); 
+semilogx(beta.^2, sum4,line1style); 
 %legend('tao_{bb}','tao_{bl}','rho_{bl}','rho_{bb}')
 xlim([beta(1)^2,beta(end)^2])
 ylim([0 1.02])

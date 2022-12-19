@@ -47,18 +47,27 @@ xLabel = '\phi \pi radians';
 %%
 N_cases = 6;
 p_cases = zeros(N_cases,length(omega),length(phi));
+figName = strings(length(omega),1);
+figs = gobjects(length(omega),1);
 for i = 1:N_cases
 p_cases(i,:,:) = sum(p(:,1:i,:),2);
 Lp_cases = 20*log10(abs(p_cases));
 end
-for i = 1:3
-    figure;
+for i = 1:length(f)
+    figName(i) = strcat('f=', num2str(f(i)),' Hz');
+    figs(i) = figure(Name=figName(i),Position =  [100, 0, 1080, 780]);
     for j = 1:6
         subplot(3,2,j)
 plot(phi/pi,squeeze(Lp_cases(j,i,:)));
 xlabel(xLabel)
 ylabel(yLabel)
+grid on
     end
+    saveFolder = fullfile(pwd,'\Plots\');
+
+    fileName = strcat('C3_Line,',figName(i),'.png');
+    filePath = fullfile(saveFolder, fileName);
+    exportgraphics(figs(i),filePath,"ContentType","image",'Resolution',600);
 end
 %%
 

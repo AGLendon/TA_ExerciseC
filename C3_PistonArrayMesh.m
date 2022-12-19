@@ -44,17 +44,20 @@ end
 %% Plotting setup
 phi = -pi/2:0.001:pi/2;
 R =100;
-yLabel = 'Meters m';
-xLabel = 'Meters m';
+yLabel = 'Y Direction m';
+xLabel = 'X Direction m';
 %%
 N_cases = 6;
 p_cases = zeros(N_cases,length(omega),length(x_mesh),length(y_mesh));
+figName = strings(length(omega),1);
+figs = gobjects(length(omega),1);
 for i = 1:N_cases
 p_cases(i,:,:,:) = sum(p_mesh(:,1:i,:,:),2);
 Lp_cases = squeeze(20*log10(abs(p_cases)));
 end
 for i = 1:length(f)
-    figure;
+    figName(i) = strcat('f=', num2str(f(i)),' Hz');
+    figs(i) = figure(Name=figName(i),Position =  [100, 0, 1080, 780]);
     for j = 1:length(v)
         subplot(3,2,j)
         contourf(X,Y,squeeze(Lp_cases(j,i,:,:))')
@@ -63,25 +66,17 @@ for i = 1:length(f)
 %plot(phi/pi,squeeze(Lp_cases(j,i,:)));
 xlabel(xLabel)
 ylabel(yLabel)
-colorbar
-
+cb = colorbar;
+ylabel(cb,'L_p dB','Rotation',90);
     end
+%Save Plots
+saveFolder = fullfile(pwd,'\Plots\');
+
+    fileName = strcat('C3_Mesh,',figName(i),'.png');
+    filePath = fullfile(saveFolder, fileName);
+    exportgraphics(figs(i),filePath,"ContentType","image",'Resolution',600);
 end
-%%
 
 
-% 
-% Lp = 20*log10(p);
-% Lp_sum = 20*log10(sum_p);
-% figure;
-% plot(phi,squeeze(Lp_sum(1,1,:)));
 
-% %% Cases
-% N_cases = 6;
-% p_case = zeros(length(omega),N_cases,length(phi));
-% for i = 1:N_cases
-%     p_case(:,i,:) = sum(p(:,1:i,:),2);
-%     Lp_case = 20*log10(p_case);
-%     figure;
-%     plot(phi,squeeze(Lp_case(1,i,:)))
-% end
+
