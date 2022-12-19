@@ -120,19 +120,19 @@ tao_bl_lb= (5*beta+8*beta.^2)./(2+6*beta+9*beta.^2); %bending to longititunal
 rho_bl_lb= beta./(2+6*beta+9*beta.^2); %bending to longitidunal reflected
 rho_bb= (1-beta.^2)./(2+6*beta+9*beta.^2); % bending to bending reflected
 tao_ll= (beta.^2)./ (2+6*beta+9*beta.^2); % longitidunal to longitidunal
-%rho_ll= 2./(2+6*beta+9*beta.^2); %  % longitidunal to longitidunal reflected
+rho_ll= 2./(2+6*beta+9*beta.^2); %  % longitidunal to longitidunal reflected
 %%
-f1 = figure(Name= 'Velocity Levels');
+f1 = figure(Name= 'Velocity Levels',Position =  [100, 0, 880, 780]);
 semilogx(f, Lv); 
 legend('L_{v1}','L_{v2}','L_{v3}','L_{v4}')
-xlabel('f in Hz')
+xlabel('f Hz')
 ylabel('Velocity Level dB ref. v_1')
 xlim([100 3000])
-ylim([-30 1.1])
+ylim([-25 1.1])
 grid on;
 %%
 
-f2 = figure(Name='Transmission & reflection coefficients, case:bending');
+f2 = figure(Name='Transmission & reflection coefficients bend, case:bending',Position =  [100, 0, 880, 780]);
 semilogx(beta.^2, tao_bb);
 hold on
 sum2 = tao_bl_lb+tao_bb;
@@ -143,7 +143,7 @@ semilogx(beta.^2, sum3);
 semilogx(beta.^2, sum4); 
 %legend('tao_{bb}','tao_{bl}','rho_{bl}','rho_{bb}')
 xlim([beta(1)^2,beta(end)^2])
-%ylim([0 1])
+ylim([0 1.02])
 xlabel('\beta^2')
 %ylabel()
 grid on;
@@ -175,11 +175,75 @@ plot(vLine+beta(index).^2,rhobbRange,'k-',HandleVisibility='off')
 text(beta(index+5).^2,rhobbRange(fix(length(rhobbRange)/2)),'\rho_{bb}')
 
 %%
-f3 = figure (Name='CORRECTED');
+f3 = figure(Name='Transmission & reflection coefficients Long, case:bending',Position =  [100, 0, 880, 780]);
+semilogx(beta.^2, tao_ll);
+hold on
+sum2 = tao_bl_lb+tao_ll;
+sum3 = rho_bl_lb+tao_bl_lb+tao_ll;
+sum4 = rho_ll+rho_bl_lb+tao_bl_lb+tao_ll;
+semilogx(beta.^2, sum2); 
+semilogx(beta.^2, sum3); 
+semilogx(beta.^2, sum4); 
+%legend('tao_{bb}','tao_{bl}','rho_{bl}','rho_{bb}')
+xlim([beta(1)^2,beta(end)^2])
+ylim([0 1.02])
+xlabel('\beta^2')
+%ylabel()
+grid on;
+
+index = 200;
+step = 0.001;
+taullRange = 0:step:tao_ll(index);
+vLine = zeros(size(taullRange));
+plot(vLine+beta(index).^2,taullRange,'k-',HandleVisibility='off')
+text(beta(index+5).^2,0.05+taullRange(fix(length(taullRange)/2)),'\tau_{ll}')
+
+index = 180;
+taulbRange = tao_ll(index):step:sum2(index);
+vLine = zeros(size(taulbRange));
+plot(vLine+beta(index).^2,taulbRange,'k-',HandleVisibility='off')
+text(beta(index+5).^2,taulbRange(fix(length(taulbRange)/2)),'\tau_{lb}')
+
+index = 200;
+rholbRange = sum2(index):step:sum3(index);
+vLine = zeros(size(rholbRange));
+plot(vLine+beta(index).^2,rholbRange,'k-',HandleVisibility='off')
+text(beta(index-30).^2,rholbRange(fix(-10+length(rholbRange)/2)),'\rho_{lb}')
+
+
+index = 180;
+rhollRange = sum3(index):step:sum4(index);
+vLine = zeros(size(rhollRange));
+plot(vLine+beta(index).^2,rhollRange,'k-',HandleVisibility='off')
+text(beta(index+5).^2,rhollRange(fix(length(rhollRange)/2)),'\rho_{ll}')
+
+%%
+f4 = figure (Name='CORRECTED',Position =  [100, 0, 880, 780]);
 semilogx(f, v.^0.5); 
-xlabel('f in Hz')
+xlabel('f Hz')
+ylabel('Velcoity ms^{-1}')
 legend('v_1','v_2','v_3','v_4')
 grid on;
 
 %xlim([beta(1)^2,beta(end)^2])
 %ylim([0 1])
+thickenall_big
+
+%% Export Figures
+saveFolder = fullfile(pwd,'\Plots\');
+
+    fileName = strcat('C3_VelocityLevels','.png');
+    filePath = fullfile(saveFolder, fileName);
+    exportgraphics(f1,filePath,"ContentType","image",'Resolution',600);
+
+    fileName = strcat('C3_BendingCoefficients','.png');
+    filePath = fullfile(saveFolder, fileName);
+    exportgraphics(f2,filePath,"ContentType","image",'Resolution',600);
+
+    fileName = strcat('C3_LongitudinalCoefficients','.png');
+    filePath = fullfile(saveFolder, fileName);
+    exportgraphics(f2,filePath,"ContentType","image",'Resolution',600);
+
+    fileName = strcat('C3_Velocity','.png');
+    filePath = fullfile(saveFolder, fileName);
+    exportgraphics(f4,filePath,"ContentType","image",'Resolution',600);
