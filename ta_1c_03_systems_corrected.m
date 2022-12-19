@@ -135,11 +135,12 @@ ax.ColorOrder = [0 0 0];
 ax.LineStyleOrder = {'-','--',':','-.'}';
 h = semilogx(f, Lv); 
 
-legend('L_{v1}','L_{v2}','L_{v3}','L_{v4}')
+legend('v_1','v_2','v_3','v_4','Position',[0.784469695842627 0.560811960584605 0.105227273854342 0.25730769827427])
 xlabel('f Hz')
 ylabel('Velocity Level dB ref. v_1')
 xlim([100 3000])
 ylim([-25 1.1])
+
 grid on;
 hold off
 %%
@@ -231,7 +232,13 @@ text(beta(index+5).^2,rhollRange(fix(length(rhollRange)/2)),'\rho_{ll}')
 
 %%
 f4 = figure (Name='CORRECTED',Position =  [100, 0, 880, 780]);
+hold on
+ax  = f4.get("CurrentAxes");
+ax.ColorOrder = [0 0 0];
+ax.LineStyleOrder = {'-','--',':','-.'}';
+
 semilogx(f, v.^0.5); 
+xlim([f(1) f(end)])
 xlabel('f Hz')
 ylabel('Velcoity ms^{-1}')
 legend('v_1','v_2','v_3','v_4')
