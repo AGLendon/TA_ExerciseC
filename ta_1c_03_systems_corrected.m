@@ -232,18 +232,18 @@ thickenall_big
 %% Export Figures
 saveFolder = fullfile(pwd,'\Plots\');
 
-    fileName = strcat('C3_VelocityLevels','.png');
+    fileName = strcat('C1_VelocityLevels','.png');
     filePath = fullfile(saveFolder, fileName);
     exportgraphics(f1,filePath,"ContentType","image",'Resolution',600);
 
-    fileName = strcat('C3_BendingCoefficients','.png');
+    fileName = strcat('C1_BendingCoefficients','.png');
     filePath = fullfile(saveFolder, fileName);
     exportgraphics(f2,filePath,"ContentType","image",'Resolution',600);
 
-    fileName = strcat('C3_LongitudinalCoefficients','.png');
+    fileName = strcat('C1_LongitudinalCoefficients','.png');
     filePath = fullfile(saveFolder, fileName);
     exportgraphics(f2,filePath,"ContentType","image",'Resolution',600);
 
-    fileName = strcat('C3_Velocity','.png');
+    fileName = strcat('C1_Velocity','.png');
     filePath = fullfile(saveFolder, fileName);
     exportgraphics(f4,filePath,"ContentType","image",'Resolution',600);
